@@ -94,18 +94,26 @@ def api_list_hats(request, location_vo_id=None):
         return JsonResponse(hat, encoder=HatDetailEncoder, safe=False)
 
 
-@require_http_methods(["GET"])
+@require_http_methods(["GET", "DELETE"])
 def api_detail_hat(request, pk):
     # Returns details of hat specified by the pk parameter
     # should return a dictionary with style_name, color, fabric, picture_url
     # and properties of the location for the hat instance
 
-    # get hat object where id = pk
-    hat = Hat.objects.get(id=pk)
-    # return a Json Response
-    return JsonResponse(
-        # hat, encoder, and safe=False
-        hat,
-        encoder=HatDetailEncoder,
-        safe=False,
-    )
+    if request.method == "GET":
+        # get hat object where id = pk
+        hat = Hat.objects.get(id=pk)
+        # return a Json Response
+        return JsonResponse(
+            # hat, encoder, and safe=False
+            hat,
+            encoder=HatDetailEncoder,
+            safe=False,
+        )
+    else:
+        # unpack object filtered by id=pk and delete()
+        # and declare a count for how many instances get filtered in
+        # _ to represent any other properties in the object
+        count, _ = Hat.objects.filter(id=pk).delete()
+        # return a JsonResponse object to confirm deletion
+        return JsonResponse({"deleted": count > 0})
