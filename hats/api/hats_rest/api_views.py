@@ -92,3 +92,20 @@ def api_list_hats(request, location_vo_id=None):
 
         # return json response with hat, encoder, and safe=False
         return JsonResponse(hat, encoder=HatDetailEncoder, safe=False)
+
+
+@require_http_methods(["GET"])
+def api_detail_hat(request, pk):
+    # Returns details of hat specified by the pk parameter
+    # should return a dictionary with style_name, color, fabric, picture_url
+    # and properties of the location for the hat instance
+
+    # get hat object where id = pk
+    hat = Hat.objects.get(id=pk)
+    # return a Json Response
+    return JsonResponse(
+        # hat, encoder, and safe=False
+        hat,
+        encoder=HatDetailEncoder,
+        safe=False,
+    )
