@@ -1,14 +1,20 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import MainPage from './MainPage';
-import Nav from './Nav';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import MainPage from "./MainPage";
+import Nav from "./Nav";
 
-function App() {
+// import components
+import HatsList from "./HatsList";
+
+function App(props) {
+  const { hats } = props;
+
   return (
     <BrowserRouter>
       <Nav />
       <div className="container">
         <Routes>
           <Route path="/" element={<MainPage />} />
+          <Route path="/hats" element={<HatsList hats={hats} />}></Route>
         </Routes>
       </div>
     </BrowserRouter>
