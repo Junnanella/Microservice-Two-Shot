@@ -32,8 +32,6 @@ def get_locations():
 
 def poll():
     while True:
-        print("Hats and locations poller polling for data")
-
         try:
             get_locations()
         except Exception as e:
