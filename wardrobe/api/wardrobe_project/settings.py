@@ -24,9 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-e9kf6nups(2tagv+$@pg(p^*4cz#tgffqchjnxqw1c*t7yfauc'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "localhost", # For humans with Insomnia
+    "wardrobe-api", # For Microservices inside Docker
+]
 
 
 # Application definition
