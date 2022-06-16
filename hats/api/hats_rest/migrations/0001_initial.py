@@ -8,27 +8,49 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='LocationVO',
+            name="LocationVO",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('import_href', models.CharField(max_length=200, unique=True)),
-                ('name', models.CharField(max_length=200)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("import_href", models.CharField(max_length=200, unique=True)),
+                ("name", models.CharField(max_length=200)),
             ],
         ),
         migrations.CreateModel(
-            name='Hat',
+            name="Hat",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('style_name', models.CharField(max_length=200)),
-                ('color', models.CharField(max_length=200)),
-                ('fabric', models.CharField(max_length=200)),
-                ('picture_url', models.URLField(null=True)),
-                ('location', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='hats', to='hats_rest.locationvo')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("style_name", models.CharField(max_length=200)),
+                ("color", models.CharField(max_length=200)),
+                ("fabric", models.CharField(max_length=200)),
+                ("picture_url", models.URLField(null=True)),
+                (
+                    "location",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        related_name="hats",
+                        to="hats_rest.locationvo",
+                    ),
+                ),
             ],
         ),
     ]

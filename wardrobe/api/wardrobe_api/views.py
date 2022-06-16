@@ -73,6 +73,7 @@ def api_locations(request):
             safe=False,
         )
 
+
 @require_http_methods(["DELETE", "GET", "PUT"])
 def api_location(request, pk):
     """
@@ -104,11 +105,7 @@ def api_location(request, pk):
     if request.method == "GET":
         try:
             location = Location.objects.get(id=pk)
-            return JsonResponse(
-                location,
-                encoder=LocationEncoder,
-                safe=False
-            )
+            return JsonResponse(location, encoder=LocationEncoder, safe=False)
         except Location.DoesNotExist:
             response = JsonResponse({"message": "Does not exist"})
             response.status_code = 404
@@ -124,7 +121,7 @@ def api_location(request, pk):
             )
         except Location.DoesNotExist:
             return JsonResponse({"message": "Does not exist"})
-    else: # PUT
+    else:
         try:
             content = json.loads(request.body)
             location = Location.objects.get(id=pk)
@@ -224,11 +221,7 @@ def api_bin(request, pk):
     if request.method == "GET":
         try:
             bin = Bin.objects.get(id=pk)
-            return JsonResponse(
-                bin,
-                encoder=BinEncoder,
-                safe=False
-            )
+            return JsonResponse(bin, encoder=BinEncoder, safe=False)
         except Bin.DoesNotExist:
             response = JsonResponse({"message": "Does not exist"})
             response.status_code = 404
@@ -244,7 +237,7 @@ def api_bin(request, pk):
             )
         except Bin.DoesNotExist:
             return JsonResponse({"message": "Does not exist"})
-    else: # PUT
+    else:
         try:
             content = json.loads(request.body)
             bin = Bin.objects.get(id=pk)
