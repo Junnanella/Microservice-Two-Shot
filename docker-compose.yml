@@ -89,6 +89,7 @@ services:
     depends_on:
       - database
       - hats-api
+      - wardrobe-api
     environment:
       DATABASE_URL: postgres://hats:password@database:5432/hats
       WAIT_HOSTS: database:5432,hats-api:8000
