@@ -69,9 +69,9 @@ def api_list_hats(request, location_vo_id=None):
         # try
         try:
             # location href = location in content
-            location_id = content["location_id"]
+            location_vo_id = content["location_vo_id"]
             # location = LocationVO.objects.get(import_href=location href)
-            location = LocationVO.objects.get(id=location_id)
+            location = LocationVO.objects.get(id=location_vo_id)
         # except if LocationVO does not exist
         except LocationVO.DoesNotExist:
             # return a json reponse
@@ -87,7 +87,6 @@ def api_list_hats(request, location_vo_id=None):
             picture_url=content.get("picture_url", None),
             location=location,
         )
-
         # return json response with hat, encoder, and safe=False
         return JsonResponse(hat, encoder=HatDetailEncoder, safe=False)
 
@@ -97,7 +96,6 @@ def api_detail_hat(request, pk):
     # Returns details of hat specified by the pk parameter
     # should return a dictionary with style_name, color, fabric, picture_url
     # and properties of the location for the hat instance
-
     if request.method == "GET":
         # get hat object where id = pk
         hat = Hat.objects.get(id=pk)
