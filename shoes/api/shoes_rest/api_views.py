@@ -32,7 +32,7 @@ class ShoeDetailEncoder(ModelEncoder):
 
 @require_http_methods(["GET", "POST"])
 def api_shoes(request, bin_vo_id=None):
-    if request.method == 'GET':
+    if request.method == "GET":
         if bin_vo_id is not None:
             shoes = Shoes.objects.filter(bin=bin_vo_id)
         else:
@@ -52,6 +52,12 @@ def api_shoes(request, bin_vo_id=None):
                 {'message': 'Invalid bin id'},
                 status=400,
             )
+        shoes = Shoes.objects.create(**content)
+        return JsonResponse(
+            shoes,
+            encoder=ShoeDetailEncoder,
+            safe=False,
+        )
 
 
 def api_show_shoe(request, pk):
