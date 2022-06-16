@@ -1,3 +1,4 @@
+from turtle import color
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 import json
@@ -5,31 +6,32 @@ import json
 from pkg_resources import require
 
 from common.json import ModelEncoder
+
 # import models
 from .models import LocationVO, Hat
 
 # Encoders
 class LocationVOEncoder(ModelEncoder):
     model = LocationVO
-    properties = ["name", "import_href"]
+    properties = ["closet_name", "import_href"]
+
 
 class HatListEncoder(ModelEncoder):
     model = Hat
-    properties = [
-        "name"
-    ]
+    properties = ["style_name", "location"]
 
     def get_extra_data(self, object):
-        return {"location": object.location.name}
+        return {"location": object.location.closet_name}
+
 
 class HatDetailEncoder(ModelEncoder):
     model = Hat
     properties = [
-        "style_name", 
+        "style_name",
         "color",
         "fabric",
-        "picture_url"
-        "location"
+        "picture_url",
+        "location",
     ]
 
     encoders = {
@@ -40,7 +42,7 @@ class HatDetailEncoder(ModelEncoder):
 # Views
 @require_http_methods(["GET", "POST"])
 def api_list_hats(request, location_vo_id=None):
-    # lists the hat names 
+    # lists the hat names
     # and the link to the hat for the specified location id
 
     # Returns a dictionary with a single key "hats"
@@ -58,35 +60,35 @@ def api_list_hats(request, location_vo_id=None):
             hats = Hat.objects.all()
         # return a JSON response objects with "hats" = hats
         # and the corresponding encoder
-        return JsonResponse(
-            {"hats": hats},
-            encoder = HatListEncoder
-        )          
-    # else 
+        return JsonResponse({"hats": hats}, encoder=HatListEncoder, safe=False)
+    # else
     else:
         # content = parse the json request body
         content = json.loads(request.body)
+        print("content: ", content)
         # try
         try:
             # location href = location in content
-            location_href = content["location"]
+            location_href = content["location_href"]
             # location = LocationVO.objects.get(import_href=location href)
             location = LocationVO.objects.get(import_href=location_href)
             # location of content = location
-            content["location"] = location
+            # content["location"] = location
         # except if LocationVO does not exist
         except LocationVO.DoesNotExist:
             # return a json reponse
             return JsonResponse(
-                 {"message:" "Invalid location id"},
-                status=400,
+                {"message": "Invalid location href"}, status=400, safe=False
             )
-        
+
         # create the hat with the content
-        hat = Hat.objects.create(**content)
-        # return json response with hat, encoder, and safe=False
-        return JsonResponse(
-            hat,
-            encoder=HatDetailEncoder,
-            safe=False
+        hat = Hat.objects.create(
+            style_name=content["style_name"],
+            color=content["color"],
+            fabric=content["fabric"],
+            picture_url=content.get("picture_url", None),
+            location=location,
         )
+
+        # return json response with hat, encoder, and safe=False
+        return JsonResponse(hat, encoder=HatDetailEncoder, safe=False)
