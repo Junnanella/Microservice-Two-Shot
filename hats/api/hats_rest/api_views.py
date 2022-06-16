@@ -13,12 +13,12 @@ from .models import LocationVO, Hat
 # Encoders
 class LocationVOEncoder(ModelEncoder):
     model = LocationVO
-    properties = ["closet_name", "import_href"]
+    properties = ["closet_name", "id"]
 
 
 class HatListEncoder(ModelEncoder):
     model = Hat
-    properties = ["style_name", "location"]
+    properties = ["style_name", "location", "id"]
 
     def get_extra_data(self, object):
         return {"location": object.location.closet_name}
@@ -69,16 +69,14 @@ def api_list_hats(request, location_vo_id=None):
         # try
         try:
             # location href = location in content
-            location_href = content["location_href"]
+            location_id = content["location_id"]
             # location = LocationVO.objects.get(import_href=location href)
-            location = LocationVO.objects.get(import_href=location_href)
-            # location of content = location
-            # content["location"] = location
+            location = LocationVO.objects.get(id=location_id)
         # except if LocationVO does not exist
         except LocationVO.DoesNotExist:
             # return a json reponse
             return JsonResponse(
-                {"message": "Invalid location href"}, status=400, safe=False
+                {"message": "Invalid location id"}, status=400, safe=False
             )
 
         # create the hat with the content
