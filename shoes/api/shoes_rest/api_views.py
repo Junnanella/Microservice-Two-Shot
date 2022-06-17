@@ -11,7 +11,7 @@ class BinVODetailEncoder(ModelEncoder):
 
 class ShoesListEncoder(ModelEncoder):
     model = Shoes
-    properties = ['model_name']
+    properties = ['model_name','manufacturer', 'color', 'bin']
 
     def get_extra_data(self, o):
         return {'bin': o.bin.closet_name}
@@ -59,11 +59,18 @@ def api_shoes(request, bin_vo_id=None):
             safe=False,
         )
 
-
+@require_http_methods(["GET","DELETE"])
 def api_show_shoe(request, pk):
-    shoe = Shoes.objects.get(id=pk)
-    return JsonResponse(
-        shoe,
-        encoder=ShoeDetailEncoder,
-        safe=False,
-    )
+    if request.method == "GET":
+        shoe = Shoes.objects.get(id=pk)
+        return JsonResponse(
+            shoe,
+            encoder=ShoeDetailEncoder,
+            safe=False,
+        )
+    else:
+        count, _ = Shoes.objects.filter(id=pk).delete()
+        return JsonResponse({"deleted": count>0})
+
+
+
