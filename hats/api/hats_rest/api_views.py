@@ -69,7 +69,7 @@ def api_list_hats(request, location_vo_id=None):
         # try
         try:
             # location href = location in content
-            location_vo_id = content["location_vo_id"]
+            location_vo_id = content["location"]
             # location = LocationVO.objects.get(import_href=location href)
             location = LocationVO.objects.get(id=location_vo_id)
         # except if LocationVO does not exist
